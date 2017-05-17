@@ -188,7 +188,7 @@ defmodule ExRated do
         true ->
             :dets.open_file(ets_table_name, [{:file, ets_table_name}, {:repair, true}])
         path when is_binary(path) ->
-            file = Path.join(path, ets_table_name)
+            file = Path.join(path, ets_table_name |> Atom.to_string) |> String.to_charlist
             :dets.open_file(ets_table_name, [{:file, file}, {:repair, true}])
     end
 
