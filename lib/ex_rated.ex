@@ -182,9 +182,16 @@ defmodule ExRated do
     :ets.new(ets_table_name, [:named_table, :ordered_set, :private])
   end
 
-  defp open_table(ets_table_name, true) do
+  defp open_table(ets_table_name, persistent) do
     open_table(ets_table_name, false)
-    :dets.open_file(ets_table_name, [{:file, ets_table_name}, {:repair, true}])
+    case persistent do
+        true ->
+            :dets.open_file(ets_table_name, [{:file, ets_table_name}, {:repair, true}])
+        path when is_binary(path) ->
+            file = Path.join(path, ets_table_name)
+            :dets.open_file(ets_table_name, [{:file, file}, {:repair, true}])
+    end
+
     :ets.delete_all_objects(ets_table_name)
     :ets.from_dets(ets_table_name, ets_table_name)
   end
