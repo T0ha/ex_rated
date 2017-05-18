@@ -197,7 +197,7 @@ defmodule ExRated do
   end
 
   defp persistent?(state) do
-    Map.get(state, :persistent) == true
+    Map.get(state, :persistent) != false
   end
 
   defp persist(state) do
